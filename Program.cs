@@ -1,5 +1,5 @@
 ﻿
-// Console.Clear();
+// // Console.Clear();
 Console.Write("Welcome to the Math Game. Please enter your name: ");
 string? userName = Console.ReadLine();
 
@@ -13,6 +13,7 @@ int num2;
 Random random = new();
 int answer;
 int userScore = 0;
+decimal winningScore = 0;
 
 do // Main Game loop
 {
@@ -24,23 +25,28 @@ do // Main Game loop
                 "[Q] - Quit the game");
     userInput = Console.ReadLine();
 
-    switch (userInput.ToLower())
+    switch (userInput)
     {
         case "1":
             AdditionGame();
+            Console.WriteLine($"Score: {userScore}");
             break;
         case "2":
             SubtractGame();
+            Console.WriteLine($"Score: {userScore}");
             break;
         case "3":
             MultiplyGame();
+            Console.WriteLine($"Score: {userScore}");
             break;
         case "4":
             DivisionGame();
+            Console.WriteLine($"Score: {userScore}");
             break;
         case "q":
+            Console.WriteLine($"Score: {userScore}");
             Console.WriteLine("Exiting program... Press any key to proceed.");
-            Console.ReadKey();
+            Console.ReadLine();
             gameActive = false;
             break;
         default:
@@ -52,8 +58,8 @@ do // Main Game loop
 
 void AdditionGame()
 {
-    Console.Clear();
-    int[] numbers = GetNumbers();
+    // Console.Clear();
+    int[] numbers = GetNumbers(1,11);
     answer = numbers[0] + numbers[1];
 
     Console.WriteLine($"What is {numbers[0]} + {numbers[1]}?");
@@ -80,7 +86,7 @@ void AdditionGame()
 
 void SubtractGame()
 {
-    Console.Clear();
+    // Console.Clear();
     int[] numbers = GetNumbers(1,11);
     answer = numbers[0] - numbers[1];
 
@@ -108,7 +114,7 @@ void SubtractGame()
 
 void MultiplyGame()
 {
-    Console.Clear();
+    // Console.Clear();
     int[] numbers = GetNumbers(1,11);
     answer = numbers[0] * numbers[1];
 
@@ -135,8 +141,23 @@ void MultiplyGame()
 
 void DivisionGame()
 {
-    Console.Clear();
-    int[] numbers = GetNumbers(1,11);
+    // Console.Clear();
+    int[] numbers = GetNumbers(1,100);
+    bool validSelection = false;
+    do // Return 
+    {
+        if (numbers[0] % numbers[1] == 0)
+        {
+            validSelection = true;
+        } else
+        {
+            numbers = GetNumbers(1,100);
+        }
+  
+    } while (!validSelection);
+    
+    
+    
     // TODO - Add logic to only proceed with the division game if the numbers produce an answer that is a whole number (int)
     answer = numbers[0] / numbers[1];
 
@@ -163,8 +184,9 @@ void DivisionGame()
 
 int[] GetNumbers(int minValue, int maxValue)
 {
-    num1 = random.Next(minValue, maxValue);
-    num2 = random.Next(minValue, maxValue);
+    /// returns two random numbers inclusive of minValue and inclusive of maxValue
+    num1 = random.Next(minValue, maxValue+1);
+    num2 = random.Next(minValue, maxValue+1);
 
     return [num1, num2];
 }
