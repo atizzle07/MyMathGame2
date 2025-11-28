@@ -1,24 +1,30 @@
 ﻿
 // // Console.Clear();
+using System.Runtime.CompilerServices;
+using System.Runtime.ConstrainedExecution;
+using MathGame;
+
 Console.Write("Welcome to the Math Game. Please enter your name: ");
 string? userName = Console.ReadLine();
 
-Console.WriteLine($"Thanks for playing, {userName}!\n");
+decimal winningScore = 0;
+
+Console.WriteLine($"Thanks for playing, {userName}!\n\n You need {winningScore} points to win.\n");
 
 // Helper Variables
-bool gameActive = true;
 string? userInput;
 int num1;
 int num2;
 Random random = new();
 int answer;
 int userScore = 0;
-decimal winningScore = 0;
+bool gameWon = false;
+List<Game> gameHistory = new();
 
 do // Main Game loop
 {
     Console.WriteLine("Please make a selection:\n\n" +
-                "[1]- Addition\n" +
+                "[1] - Addition\n" +
                 "[2] - Subtraction\n" +
                 "[3] - Multiplication\n" +
                 "[4] - Division\n" +
@@ -29,32 +35,36 @@ do // Main Game loop
     {
         case "1":
             AdditionGame();
+            saveGame();
             Console.WriteLine($"Score: {userScore}");
             break;
         case "2":
             SubtractGame();
+            saveGame();
             Console.WriteLine($"Score: {userScore}");
             break;
         case "3":
             MultiplyGame();
+            saveGame();
             Console.WriteLine($"Score: {userScore}");
             break;
         case "4":
             DivisionGame();
+            saveGame();
             Console.WriteLine($"Score: {userScore}");
             break;
         case "q":
             Console.WriteLine($"Score: {userScore}");
             Console.WriteLine("Exiting program... Press any key to proceed.");
             Console.ReadLine();
-            gameActive = false;
+            userScore = -1;
             break;
         default:
             Console.WriteLine("That is not a valid selection. Please try again...");
             break;
     }
 
-} while (gameActive == true);
+} while ((decimal)userScore < winningScore || userScore == -1);
 
 void AdditionGame()
 {
@@ -71,6 +81,7 @@ void AdditionGame()
     if (userCheck == answer)
     {
         Console.WriteLine("That is correct!");
+        gameWon = true;
         userScore++;
     }
     else
@@ -78,6 +89,7 @@ void AdditionGame()
         Console.WriteLine("Sorry, that answer is incorrect.");
         if (userScore > 0) // Do not decrease score if it is already 0, which is the lowest valid score
         {
+            gameWon = false;
             userScore--;
         }
     }
@@ -100,6 +112,7 @@ void SubtractGame()
     if (userCheck == answer)
     {
         Console.WriteLine("That is correct!");
+        gameWon = true;
         userScore++;
     }
     else
@@ -107,6 +120,7 @@ void SubtractGame()
         Console.WriteLine("Sorry, that answer is incorrect.");
         if (userScore > 0) // Do not decrease score if it is already 0, which is the lowest valid score
         {
+            gameWon = false;
             userScore--;
         }
     }
@@ -127,6 +141,7 @@ void MultiplyGame()
     if (userCheck == answer)
     {
         Console.WriteLine("That is correct!");
+        gameWon = true;
         userScore++;
     }
     else
@@ -134,6 +149,7 @@ void MultiplyGame()
         Console.WriteLine("Sorry, that answer is incorrect.");
         if (userScore > 0) // Do not decrease score if it is already 0, which is the lowest valid score
         {
+            gameWon = false;
             userScore--;
         }
     }
@@ -170,6 +186,7 @@ void DivisionGame()
     if (userCheck == answer)
     {
         Console.WriteLine("That is correct!");
+        gameWon = true;
         userScore++;
     }
     else
@@ -177,6 +194,7 @@ void DivisionGame()
         Console.WriteLine("Sorry, that answer is incorrect.");
         if (userScore > 0) // Do not decrease score if it is already 0, which is the lowest valid score
         {
+            gameWon = false;
             userScore--;
         }
     }
@@ -190,3 +208,34 @@ int[] GetNumbers(int minValue, int maxValue)
 
     return [num1, num2];
 }
+
+void saveGame()
+{
+    System.Console.WriteLine("Game saved!");
+    Game game = new();
+    game.ID = gameHistory.Count+1;
+    game.Player = userName;
+    game.Num1 = num1;
+    game.Num2 = num2;
+    game.Result = gameWon ? "Win" : "Loss";
+    switch (userInput) // Saves operation type
+    {
+        case "1":
+            game.Operation = OperationType.Addition;
+            break;
+        case "2":
+            game.Operation = OperationType.Subtraction;
+            break;
+        case "3":
+            game.Operation = OperationType.Multiplication;
+            break;
+        case "4":
+            game.Operation = OperationType.Division;
+            break;
+        default:
+            System.Console.WriteLine("Error, an operation type must be declared to save a game.");
+            break;
+    }
+    gameHistory.Add(game);
+}
+
