@@ -7,7 +7,7 @@ using MathGame;
 Console.Write("Welcome to the Math Game. Please enter your name: ");
 string? userName = Console.ReadLine();
 
-decimal winningScore = 0;
+decimal winningScore = 10;
 
 Console.WriteLine($"Thanks for playing, {userName}!\n\n You need {winningScore} points to win.\n");
 
@@ -19,7 +19,7 @@ Random random = new();
 int answer;
 int userScore = 0;
 bool gameWon = false;
-List<Game> gameHistory = new();
+List<Game> gameHistory = new(); //TODO - Create this as a new class with games as the property. Then create methods for CRUD operations within this class.
 
 do // Main Game loop
 {
@@ -57,14 +57,14 @@ do // Main Game loop
             Console.WriteLine($"Score: {userScore}");
             Console.WriteLine("Exiting program... Press any key to proceed.");
             Console.ReadLine();
-            userScore = -1;
+            userScore = (int)winningScore + 1;
             break;
         default:
             Console.WriteLine("That is not a valid selection. Please try again...");
             break;
     }
 
-} while ((decimal)userScore < winningScore || userScore == -1);
+} while (userScore < winningScore);
 
 void AdditionGame()
 {
