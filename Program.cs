@@ -19,7 +19,8 @@ Random random = new();
 int answer;
 int userScore = 0;
 bool gameWon = false;
-List<Game> gameHistory = new(); //TODO - Create this as a new class with games as the property. Then create methods for CRUD operations within this class.
+//List<Game> games;
+GameHistory history = new();
 
 do // Main Game loop
 {
@@ -28,6 +29,7 @@ do // Main Game loop
                 "[2] - Subtraction\n" +
                 "[3] - Multiplication\n" +
                 "[4] - Division\n" +
+                "[5] - View Game History\n" +
                 "[Q] - Quit the game");
     userInput = Console.ReadLine();
 
@@ -52,6 +54,9 @@ do // Main Game loop
             DivisionGame();
             saveGame();
             Console.WriteLine($"Score: {userScore}");
+            break;
+        case "5":
+            history.DisplayItems();
             break;
         case "q":
             Console.WriteLine($"Score: {userScore}");
@@ -213,7 +218,7 @@ void saveGame()
 {
     System.Console.WriteLine("Game saved!");
     Game game = new();
-    game.ID = gameHistory.Count+1;
+    game.ID = history.GameItem.Count;
     game.Player = userName;
     game.Num1 = num1;
     game.Num2 = num2;
@@ -236,6 +241,6 @@ void saveGame()
             System.Console.WriteLine("Error, an operation type must be declared to save a game.");
             break;
     }
-    gameHistory.Add(game);
+    history.AddGameItem(game);
 }
 
